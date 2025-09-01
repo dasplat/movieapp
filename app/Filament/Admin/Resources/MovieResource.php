@@ -25,6 +25,19 @@ class MovieResource extends Resource
 
     protected static ?string $navigationGroup = "Lists management";
 
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'publish'
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -63,7 +76,7 @@ class MovieResource extends Resource
                         ->label('Release Date')
                         ->sortable()
                         ->colors([
-                            'primary' => static fn ($state): bool => $state !== null,
+                            'primary' => static fn($state): bool => $state !== null,
                         ])
                         ->extraAttributes([
                             'class' => 'text-sm', // Smaller text for badges
@@ -83,9 +96,9 @@ class MovieResource extends Resource
                     BadgeColumn::make('vote_average')
                         ->label('Rating')
                         ->colors([
-                            'danger' => static fn ($state): bool => $state <= 3,
-                            'warning' => static fn ($state): bool => $state > 3 && $state <= 4.5,
-                            'success' => static fn ($state): bool => $state > 4.5,
+                            'danger' => static fn($state): bool => $state <= 3,
+                            'warning' => static fn($state): bool => $state > 3 && $state <= 4.5,
+                            'success' => static fn($state): bool => $state > 4.5,
                         ])
                         ->sortable()
                         ->extraAttributes([
