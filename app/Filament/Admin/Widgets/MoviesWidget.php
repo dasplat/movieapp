@@ -2,22 +2,18 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use Filament\Actions\Action;
 use App\Models\Catalogue;
 use App\Models\Movie;
-use App\Models\SearchBTCPrice;
 use App\Models\SearchMovie;
 use Filament\Forms\Components\Select;
-use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Http;
-use Filament\Tables\Actions\Action;
 
 class MoviesWidget extends BaseWidget
 {
@@ -27,18 +23,18 @@ class MoviesWidget extends BaseWidget
 
     protected function getTableQuery(): Builder
     {
-        $filter = $this->filters['name'] ?? null;
+        $filter = $this->pageFilters['name'] ?? null;
 
         SearchMovie::setVar($filter);
 
-       return SearchMovie::query();
+        return SearchMovie::query();
     }
 
     protected function getTableActions(): array
     {
         return [
             Action::make('AddToList')
-                ->form([
+                ->schema([
                     Select::make('catalogue_id')
                         ->label('List')
                         ->options(Catalogue::query()->pluck('name', 'id'))
@@ -64,10 +60,10 @@ class MoviesWidget extends BaseWidget
                 // Poster Image
                 ImageColumn::make('poster_path')
                     ->label('Poster')
+                    ->imageWidth(100)
+                    ->imageHeight(150)
                     ->extraImgAttributes([
-                        'src' => 'img',
-                        'width' => '100%', // Make the image responsive
-                        'style' => 'border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);', // Add rounded corners and shadow
+                        'style' => 'border-radius: 10px;',
                     ]),
 
                 // Title
@@ -76,9 +72,9 @@ class MoviesWidget extends BaseWidget
                     ->sortable()
                     ->weight('medium')
                     ->alignLeft()
-                    ->color('primary') // Apply a primary color
+                    ->color('primary')
                     ->extraAttributes([
-                        'class' => 'text-lg font-bold', // Increase font size and bold
+                        'class' => 'text-lg font-bold',
                     ]),
 
                 // Release Date
@@ -86,7 +82,7 @@ class MoviesWidget extends BaseWidget
                     ->label('Release Date')
                     ->sortable()
                     ->colors([
-                        'primary' => static fn ($state): bool => $state !== null,
+                        'primary' => static fn($state): bool => $state !== null,
                     ])
                     ->extraAttributes([
                         'class' => 'text-sm', // Smaller text for badges
@@ -106,9 +102,9 @@ class MoviesWidget extends BaseWidget
                 BadgeColumn::make('vote_average')
                     ->label('Rating')
                     ->colors([
-                        'danger' => static fn ($state): bool => $state <= 3,
-                        'warning' => static fn ($state): bool => $state > 3 && $state <= 4.5,
-                        'success' => static fn ($state): bool => $state > 4.5,
+                        'danger' => static fn($state): bool => $state <= 3,
+                        'warning' => static fn($state): bool => $state > 3 && $state <= 4.5,
+                        'success' => static fn($state): bool => $state > 4.5,
                     ])
                     ->sortable()
                     ->extraAttributes([
