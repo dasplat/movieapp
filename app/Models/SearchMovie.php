@@ -24,7 +24,7 @@ class SearchMovie extends Model
         $response = Http::asJson()
             ->acceptJson()
             ->get('https://api.themoviedb.org/3/search/movie', [
-                'api_key' => config("TMDB_API_KEY"),
+                'api_key' => config("app.TMDB_API_KEY"),
                 'query' => self::$var ?? '',
             ]);
 
