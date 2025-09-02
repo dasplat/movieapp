@@ -28,6 +28,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'TMDB_API_KEY' => env('TMDB_API_KEY'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
