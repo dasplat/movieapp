@@ -61,34 +61,31 @@ class MovieResource extends Resource
                         ->sortable()
                         ->weight('medium')
                         ->alignLeft()
-                        ->color('primary') // Apply a primary color
+                        ->color('primary')
                         ->extraAttributes([
-                            'class' => 'text-lg font-bold', // Increase font size and bold
+                            'class' => 'text-lg font-bold',
                         ]),
-
-                    // Release Date
                     BadgeColumn::make('release_date')
+                        ->date('d/m/Y')
                         ->label('Release Date')
                         ->sortable()
                         ->colors([
                             'primary' => static fn($state): bool => $state !== null,
                         ])
                         ->extraAttributes([
-                            'class' => 'text-sm', // Smaller text for badges
+                            'class' => 'text-sm',
                         ]),
-
-                    // Overview
                     TextColumn::make('overview')
                         ->label('Overview')
                         ->sortable()
                         ->color('secondary')
-                        ->wrap() // Wrap long text
+                        ->wrap()
                         ->extraAttributes([
-                            'class' => 'italic text-sm', // Add italic style and smaller font
+                            'class' => 'italic text-sm',
                         ]),
-
-                    // Rating
                     BadgeColumn::make('vote_average')
+                        ->numeric(decimalPlaces: 1)
+                        ->visible(static fn($state): bool => !$state == 0)
                         ->label('Rating')
                         ->colors([
                             'danger' => static fn($state): bool => $state <= 3,
@@ -97,7 +94,7 @@ class MovieResource extends Resource
                         ])
                         ->sortable()
                         ->extraAttributes([
-                            'class' => 'font-medium', // Medium font weight for badges
+                            'class' => 'font-medium',
                         ]),
                 ])
             ])

@@ -57,7 +57,6 @@ class MoviesWidget extends BaseWidget
     {
         return [
             Stack::make([
-                // Poster Image
                 ImageColumn::make('poster_path')
                     ->label('Poster')
                     ->imageWidth(100)
@@ -66,7 +65,6 @@ class MoviesWidget extends BaseWidget
                         'style' => 'border-radius: 10px;',
                     ]),
 
-                // Title
                 TextColumn::make('title')
                     ->label('Title')
                     ->sortable()
@@ -77,30 +75,29 @@ class MoviesWidget extends BaseWidget
                         'class' => 'text-lg font-bold',
                     ]),
 
-                // Release Date
                 BadgeColumn::make('release_date')
+                    ->date('d/m/Y')
                     ->label('Release Date')
                     ->sortable()
                     ->colors([
                         'primary' => static fn($state): bool => $state !== null,
                     ])
                     ->extraAttributes([
-                        'class' => 'text-sm', // Smaller text for badges
+                        'class' => 'text-sm',
                     ]),
-
-                // Overview
                 TextColumn::make('overview')
                     ->label('Overview')
                     ->sortable()
                     ->color('secondary')
-                    ->wrap() // Wrap long text
+                    ->wrap()
                     ->extraAttributes([
-                        'class' => 'italic text-sm', // Add italic style and smaller font
+                        'class' => 'italic text-sm',
                     ]),
 
-                // Rating
                 BadgeColumn::make('vote_average')
+                    ->numeric(decimalPlaces: 1)
                     ->label('Rating')
+                    ->visible(static fn($state): bool => !$state == 0)
                     ->colors([
                         'danger' => static fn($state): bool => $state <= 3,
                         'warning' => static fn($state): bool => $state > 3 && $state <= 4.5,
@@ -108,7 +105,7 @@ class MoviesWidget extends BaseWidget
                     ])
                     ->sortable()
                     ->extraAttributes([
-                        'class' => 'font-medium', // Medium font weight for badges
+                        'class' => 'font-medium',
                     ]),
             ])
         ];
