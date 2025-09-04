@@ -10,11 +10,17 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use App\Filament\Admin\Resources\Catalogues\Pages\ManageCatalogues;
 use App\Models\Catalogue;
+use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Forms\Components\Grid;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Actions;
+use Filament\Support\Enums\VerticalAlignment;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -73,13 +79,32 @@ class CatalogueResource extends Resource
                 RepeatableEntry::make('movies')
                     ->schema([
                         ImageEntry::make('poster_path')
+                            ->imageHeight(100)
                             ->hiddenLabel(),
                         TextEntry::make('title')
-                            ->hiddenLabel(),
-                        TextEntry::make('overview')
-                            ->hiddenLabel(),
+                            ->hiddenLabel()
+                            ->extraAttributes([
+                                'style' => 'margin-top: 15%;'
+                            ]),
+                        Actions::make([
+                            Action::make('watched')
+                                ->hiddenLabel()
+                                ->url('https://youtu.be/dQw4w9WgXcQ?si=gTmeIDLACuXX6Ktq')
+                                ->icon(Heroicon::Eye),
+                            Action::make('delete')
+                                ->url('https://www.youtube.com/watch?v=L1WAOByxzYA')
+                                ->hiddenLabel()
+                                ->color('danger')
+                                ->requiresConfirmation()
+                                ->icon(Heroicon::Trash),
+                        ])->extraAttributes([
+                            'style' => 'margin-top: 12%; margin-left:50%'
+                        ])
                     ])
-                    ->columns(1)
+                    ->columnSpanFull()
+                    ->columns([
+                        'default' => 3,
+                    ])
             ]);
     }
 
