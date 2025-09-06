@@ -23,16 +23,34 @@ use Filament\Support\Enums\VerticalAlignment;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CatalogueResource extends Resource
 {
     protected static ?string $model = Catalogue::class;
 
-    public static ?string $label = 'list';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-list-bullet';
+    public static function getModelLabel(): string
+    {
+        return __('base.model.list');
+    }
 
-    protected static string | \UnitEnum | null $navigationGroup = "Lists management";
+    public static function getPluralModelLabel(): string
+    {
+        return __('base.navigation.lists');
+    }
+
+    protected static string | \BackedEnum | null $navigationIcon = Heroicon::OutlinedListBullet;
+
+    public static function getNavigationGroup(): string | UnitEnum | null
+    {
+        return __('base.navigationGroup.listManagment');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -51,7 +69,11 @@ class CatalogueResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('description')
+                TextColumn::make('description'),
+                TextColumn::make('movies_count')
+                    ->label(__('base.catalogue.movies'))
+                    ->badge()
+                    ->counts('movies'),
             ])
             ->filters([
                 //
