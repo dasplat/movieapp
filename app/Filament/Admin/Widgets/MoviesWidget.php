@@ -7,10 +7,12 @@ use App\Models\Catalogue;
 use App\Models\Movie;
 use App\Models\SearchMovie;
 use Filament\Forms\Components\Select;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,10 +26,19 @@ class MoviesWidget extends BaseWidget
     protected function getTableQuery(): Builder
     {
         $filter = $this->pageFilters['name'] ?? null;
-
         SearchMovie::setVar($filter);
-
         return SearchMovie::query();
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->heading(__('base.dashboard.searchResults'))
+            ->columns($this->getTableColumns())
+            ->recordActions($this->getTableActions())
+            ->emptyStateHeading(__('base.dashboard.noMoviesFound'))
+            ->emptyStateDescription(__('base.dashboard.noMoviesFoundDescription'))
+            ->emptyStateIcon(Heroicon::Film);
     }
 
     protected function getTableActions(): array
@@ -85,6 +96,7 @@ class MoviesWidget extends BaseWidget
                     ->extraAttributes([
                         'class' => 'text-sm',
                     ]),
+
                 TextColumn::make('overview')
                     ->label('Overview')
                     ->sortable()

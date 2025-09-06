@@ -23,6 +23,11 @@ class MovieResource extends Resource
 
     protected static string | \UnitEnum | null $navigationGroup = "Lists management";
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function getPermissionPrefixes(): array
     {
         return [
